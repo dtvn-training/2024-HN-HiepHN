@@ -27,28 +27,23 @@ class ScrapingClubSpider(scrapy.Spider):
                 url_categories.append(category.get_attribute("href"))
 
             for url_category in url_categories:
-                time.sleep(2)
-                yield SeleniumRequest(url=url_category, callback=self.parseCategory)
+                for i in range (1,100):
+                    time.sleep(2)
+                    new_url=url_category+"/?page="+str(i)
+                    yield SeleniumRequest(url=new_url, callback=self.parseCategory)
 
         def parseCategory(self, response):
             driver = response.request.meta["driver"]
             
             url_products = []
-
-            while True:
-                time.sleep(1)
-
-                try:
-                    product_list = driver.find_elements(By.CSS_SELECTOR,"._95X4G")
-                    for product in product_list:
-                        url_products.append(product.find_element(By.CSS_SELECTOR,"a").get_attribute("href"))
-                        print(product.find_element(By.CSS_SELECTOR,"a").get_attribute("href"))
-                    next_button = driver.find_element(By.CSS_SELECTOR,".ant-pagination-item-link")
-                    next_button.click()   
-                except Exception as e:
-                    break
-                     
-            
+            try:
+                product_list = driver.find_elements(By.CSS_SELECTOR,"._95X4G")
+                for product in product_list:
+                    url_products.append(product.find_element(By.CSS_SELECTOR,"a").get_attribute("href"))
+                    print(product.find_element(By.CSS_SELECTOR,"a").get_attribute("href"))
+            except Exception as e:
+                print(e)
+                
             for url_product in url_products:
                 yield {
                     "url":url_product

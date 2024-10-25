@@ -21,7 +21,7 @@ class ScrapingClubSpider(scrapy.Spider):
 
             category_list = driver.find_elements(
                 By.CSS_SELECTOR, ".styles__StyledItemV2-sc-oho8ay-1")
-
+  
             url_categories = []
             for category in category_list:
                 url_categories.append(category.find_element(

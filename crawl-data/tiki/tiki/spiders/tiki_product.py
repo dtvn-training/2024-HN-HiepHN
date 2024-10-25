@@ -18,12 +18,12 @@ class ScrapingClubSpider(scrapy.Spider):
     def start_requests(self):
         df=pd.read_csv("./output/tiki_url_filtered.csv")
         urls=df["url"].tolist()
-        for url in urls:
-            time.sleep(2)
-            try:
-                yield SeleniumRequest(url=url, callback=self.parseProduct)
-            except Exception as e:
-                print(e)
+        for i in range(1,50):
+                time.sleep(2)
+                try:
+                    yield SeleniumRequest(url=urls[i], callback=self.parseProduct)
+                except Exception as e:
+                    print(e)
         
     def parseProduct(self,response):
         driver = response.request.meta["driver"]
@@ -147,58 +147,58 @@ class ScrapingClubSpider(scrapy.Spider):
 
 
         review_list_table=[]
-        while True:
+        # while True:
                 
-            try:
-                WebDriverWait(driver,10).until(EC.presence_of_element_located((By.CSS_SELECTOR,".customer-reviews__pagination li a.next")))
-            except Exception as e:
-                print(e)
+        #     try:
+        #         WebDriverWait(driver,10).until(EC.presence_of_element_located((By.CSS_SELECTOR,".customer-reviews__pagination li a.next")))
+        #     except Exception as e:
+        #         print(e)
                 
-            try:
-                review_list = driver.find_elements(By.CSS_SELECTOR,".review-comment")
+        try:
+            review_list = driver.find_elements(By.CSS_SELECTOR,".review-comment")
+                
+            for review in review_list:
+                review_table=[]
+                try:
+                    show_more_button = review.find_element(By.CSS_SELECTOR,".show-more-content")
+                    show_more_button.click()
+                except Exception as e:
+                    print(e)
                     
-                for review in review_list:
-                    review_table=[]
-                    try:
-                        show_more_button = review.find_element(By.CSS_SELECTOR,".show-more-content")
-                        show_more_button.click()
-                    except Exception as e:
-                        print(e)
+                try:
+                    review_table.append(review.find_element(By.CSS_SELECTOR,".review-comment__rating").get_attribute("innerHTML"))
+                except Exception as e :
+                    print(e)
+                    review_table.append("")
+                    
+                try:
+                    review_table.append(review.find_element(By.CSS_SELECTOR,".review-comment__content").text)
+                except Exception as e :
+                    print(e)
+                    review_table.append("")
+                    
+                    review_img=[]
+                try:
+                    imgs = review.find_elements(By.CSS_SELECTOR,".review-comment__image")
+                    for img in imgs:
+                        review_img.append(img.get_attribute("style"))
+                    review_table.append(review_img)
+                except :
+                    review_table.append([])
+                    
+                review_list_table.append(review_table)
                         
-                    try:
-                        review_table.append(review.find_element(By.CSS_SELECTOR,".review-comment__rating").get_attribute("innerHTML"))
-                    except Exception as e :
-                        print(e)
-                        review_table.append("")
-                        
-                    try:
-                        review_table.append(review.find_element(By.CSS_SELECTOR,".review-comment__content").text)
-                    except Exception as e :
-                        print(e)
-                        review_table.append("")
-                        
-                        review_img=[]
-                    try:
-                        imgs = review.find_elements(By.CSS_SELECTOR,".review-comment__image")
-                        for img in imgs:
-                            review_img.append(img.get_attribute("style"))
-                        review_table.append(review_img)
-                    except :
-                        review_table.append([])
-                        
-                    review_list_table.append(review_table)
-                        
-            except Exception as e:
-                print(e) 
+        except Exception as e:
+            print(e) 
                 
                 
-            try:
-                next_comment_button = driver.find_element(By.CSS_SELECTOR,".customer-reviews__pagination li a.next")
-                next_comment_button.click()
-            except Exception as e:
-                print("button err")
-                print(e)
-                break 
+            # try:
+            #     next_comment_button = driver.find_element(By.CSS_SELECTOR,".customer-reviews__pagination li a.next")
+            #     next_comment_button.click()
+            # except Exception as e:
+            #     print("button err")
+            #     print(e)
+            #     break 
             
         yield{
                 "product_name":product.get("product_name",""),
