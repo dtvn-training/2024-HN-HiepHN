@@ -19,7 +19,7 @@ class ScrapingClubSpider(scrapy.Spider):
     def start_requests(self):
         df=pd.read_csv("./output/lazada_url_filtered.csv")
         urls=df["url"].tolist()
-        for i in range(1,20):
+        for i in range(1,100):
             time.sleep(2)
             try:
                 yield SeleniumRequest(url=urls[i], callback=self.parseProduct)

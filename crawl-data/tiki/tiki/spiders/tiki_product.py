@@ -18,7 +18,7 @@ class ScrapingClubSpider(scrapy.Spider):
     def start_requests(self):
         df=pd.read_csv("./output/tiki_url_filtered.csv")
         urls=df["url"].tolist()
-        for i in range(1,50):
+        for i in range(1,200):
                 time.sleep(2)
                 try:
                     yield SeleniumRequest(url=urls[i], callback=self.parseProduct)
@@ -70,7 +70,7 @@ class ScrapingClubSpider(scrapy.Spider):
             "product[\"discount_rate\"] = driver.find_element(By.CSS_SELECTOR,\".product-price__discount-rate\").text",
             "product[\"original_price\"] = driver.find_element(By.CSS_SELECTOR,\".product-price__original-price\").text",
                 
-            "product[\"avg_rating\"] = driver.find_element(By.CSS_SELECTOR,\".styles__RatingStyled-sc-1onuk2l-0 div[style=\"margin-right:4px;font-size:14px;line-height:150%;font-weight:500\"]\").text",
+            
             "product[\"number_solds\"] = driver.find_element(By.CSS_SELECTOR,\".styles__RatingStyled-sc-1onuk2l-0 .styles__StyledQuantitySold-sc-1onuk2l-3\").text",
             "product[\"number_reviews\"] = driver.find_element(By.CSS_SELECTOR,\".styles__RatingStyled-sc-1onuk2l-0 .number\").text",
             
@@ -144,7 +144,13 @@ class ScrapingClubSpider(scrapy.Spider):
             print(e)
             # driver.save_screenshot("tiki6.png")
 
+        WebDriverWait(driver,1)
 
+        try:
+            avg_rating = driver.find_elements(By.CSS_SELECTOR,".review-rating__point")
+            product["avg_rating"] = avg_rating.text
+        except Exception as e:
+            print(e)
 
         review_list_table=[]
         # while True:
