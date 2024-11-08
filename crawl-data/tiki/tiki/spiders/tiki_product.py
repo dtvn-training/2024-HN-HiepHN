@@ -1,5 +1,5 @@
 import scrapy
-from scrapy_selenium import SeleniumRequest
+from selenium import webdriver
 from selenium.webdriver import ActionChains
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
@@ -18,15 +18,16 @@ class ScrapingClubSpider(scrapy.Spider):
     def start_requests(self):
         df=pd.read_csv("./output/tiki_url_filtered.csv")
         urls=df["url"].tolist()
-        for i in range(1,200):
+        for i in range(0,200):
                 time.sleep(2)
                 try:
-                    yield SeleniumRequest(url=urls[i], callback=self.parseProduct)
+                    yield scrapy.Request(url=urls[i], callback=self.parseProduct)
                 except Exception as e:
                     print(e)
         
     def parseProduct(self,response):
-        driver = response.request.meta["driver"]
+        driver = webdriver.Chrome()
+        driver.get(response.url)
         product={}
 
 
@@ -147,7 +148,7 @@ class ScrapingClubSpider(scrapy.Spider):
         WebDriverWait(driver,1)
 
         try:
-            avg_rating = driver.find_elements(By.CSS_SELECTOR,".review-rating__point")
+            avg_rating = driver.find_element(By.CSS_SELECTOR,".review-rating__point")
             product["avg_rating"] = avg_rating.text
         except Exception as e:
             print(e)
@@ -183,19 +184,26 @@ class ScrapingClubSpider(scrapy.Spider):
                     print(e)
                     review_table.append("")
                     
-                    review_img=[]
                 try:
+                    driver.save_screenshot("tiki.png")
+                    review_img=[]
                     imgs = review.find_elements(By.CSS_SELECTOR,".review-comment__image")
+                    # ActionChains(driver).scroll_to_element(imgs).perform()
                     for img in imgs:
                         review_img.append(img.get_attribute("style"))
                     review_table.append(review_img)
-                except :
-                    review_table.append([])
+                except Exception as e:
+                    print(e)
+                    print("abc")
+                    review_table.append("ff")
                     
                 review_list_table.append(review_table)
                         
         except Exception as e:
             print(e) 
+        
+        
+        
                 
                 
             # try:
@@ -205,7 +213,7 @@ class ScrapingClubSpider(scrapy.Spider):
             #     print("button err")
             #     print(e)
             #     break 
-            
+        driver.close()    
         yield{
                 "product_name":product.get("product_name",""),
                 "product_url":product.get("product_url",""),
