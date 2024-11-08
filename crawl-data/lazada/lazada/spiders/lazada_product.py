@@ -33,7 +33,6 @@ class ScrapingClubSpider(scrapy.Spider):
 
         driver.set_window_position(0,0)
         driver.set_window_size(1920,1080)
-            # driver.save_screenshot("tiki1.png")
         time.sleep(2)
         ActionChains(driver).scroll_by_amount(0,1000).perform()
 
@@ -45,14 +44,12 @@ class ScrapingClubSpider(scrapy.Spider):
         except Exception as e:
             print(e)
             
-            # driver.save_screenshot("tiki2.png")
         ActionChains(driver).scroll_by_amount(0,1000).perform()
         try:
             WebDriverWait(driver,10).until(EC.presence_of_element_located((By.CSS_SELECTOR,".pdp-product-highlights")))
         except Exception as e: 
             print(e)
     
-            # driver.save_screenshot("tiki3.png")
         ActionChains(driver).scroll_by_amount(0,1000).perform()
 
         try: 
@@ -60,7 +57,6 @@ class ScrapingClubSpider(scrapy.Spider):
         except Exception as e:
             print(e)
             
-            # driver.save_screenshot("tiki4.png")
         ActionChains(driver).scroll_by_amount(0,1000).perform()
             
           
@@ -137,13 +133,11 @@ class ScrapingClubSpider(scrapy.Spider):
         except Exception as e:
             print(e)
                 
-            # driver.save_screenshot("tiki5.png")
         ActionChains(driver).scroll_by_amount(0,1000).perform()
         try:
             WebDriverWait(driver,10).until(EC.presence_of_element_located((By.CSS_SELECTOR,"button.next-pagination-item")))
         except Exception as e:
             print(e)
-            # driver.save_screenshot("tiki6.png")
 
 
 

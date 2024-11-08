@@ -33,7 +33,6 @@ class ScrapingClubSpider(scrapy.Spider):
 
         driver.set_window_position(0,0)
         driver.set_window_size(1920,1080)
-            # driver.save_screenshot("tiki1.png")
         ActionChains(driver).scroll_by_amount(0,1000).perform()
 
         try:
@@ -44,14 +43,12 @@ class ScrapingClubSpider(scrapy.Spider):
         except Exception as e:
             print(e)
             
-            # driver.save_screenshot("tiki2.png")
         ActionChains(driver).scroll_by_amount(0,1000).perform()
         try:
             WebDriverWait(driver,10).until(EC.presence_of_element_located((By.CSS_SELECTOR,".HighlightInfo__HighlightInfoContentStyled-sc-1pr13u3-0")))
         except Exception as e: 
             print(e)
     
-            # driver.save_screenshot("tiki3.png")
         ActionChains(driver).scroll_by_amount(0,1000).perform()
 
         try: 
@@ -59,7 +56,6 @@ class ScrapingClubSpider(scrapy.Spider):
         except Exception as e:
             print(e)
             
-            # driver.save_screenshot("tiki4.png")
         ActionChains(driver).scroll_by_amount(0,1000).perform()
             
           
@@ -137,13 +133,11 @@ class ScrapingClubSpider(scrapy.Spider):
         except Exception as e:
             print(e)
                 
-            # driver.save_screenshot("tiki5.png")
         ActionChains(driver).scroll_by_amount(0,1000).perform()
         try:
             WebDriverWait(driver,10).until(EC.presence_of_element_located((By.CSS_SELECTOR,".customer-reviews__pagination li a.next")))
         except Exception as e:
             print(e)
-            # driver.save_screenshot("tiki6.png")
 
         WebDriverWait(driver,1)
 
@@ -188,7 +182,6 @@ class ScrapingClubSpider(scrapy.Spider):
                     driver.save_screenshot("tiki.png")
                     review_img=[]
                     imgs = review.find_elements(By.CSS_SELECTOR,".review-comment__image")
-                    # ActionChains(driver).scroll_to_element(imgs).perform()
                     for img in imgs:
                         review_img.append(img.get_attribute("style"))
                     review_table.append(review_img)
