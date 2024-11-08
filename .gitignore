@@ -1,0 +1,11 @@
+#Chrome drive
+crawl-data/*/chromedriver.exe
+
+#Data
+crawl-data/lazada/output*
+crawl-data/tiki/output*
+
+#Cache 
+crawl-data/tiki/tiki/spiders/__pycache__*
+crawl-data/tiki/tiki/__pycache__*
+crawl-data/lazada/lazada/spiders/__pycache__*
