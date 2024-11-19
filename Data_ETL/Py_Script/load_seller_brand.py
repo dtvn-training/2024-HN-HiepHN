@@ -66,12 +66,14 @@ for idx,row in df_brand.iterrows():
         df_brand.at[idx,'id'] = brand.id
         
     except IntegrityError as e: 
+        print(e)
         session.rollback() 
         
         existing_brand = session.query(Brand).filter_by(brand_url=row['brand_url']).first() 
         if existing_brand: 
             df_brand.at[idx,'id'] = existing_brand.id
-    except SQLAlchemyError as e: 
+    except SQLAlchemyError as e:
+        print(e) 
         session.rollback() 
                 
 df_seller[['seller_url','id',]].to_csv(os.path.join(target_dir,"./loaded_seller.csv"),index=False)

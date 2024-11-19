@@ -102,7 +102,7 @@
       <add_date>N</add_date>
       <add_time>N</add_time>
       <insertScript>Y</insertScript>
-      <script>&#x22;C&#x3a;&#x5c;Users&#x5c;HiepHN&#x5c;AppData&#x5c;Local&#x5c;Programs&#x5c;Python&#x5c;Python310&#x5c;python.exe&#x22; &#x22;C&#x3a;&#x5c;Hiep&#x5c;DataKiban&#x5c;2024-HiepHN&#x5c;Data_ETL&#x5c;Py_Script&#x5c;load_seller_brand.py&#x22;</script>
+      <script>&#x22;C&#x3a;&#x5c;Users&#x5c;hieph&#x5c;AppData&#x5c;Local&#x5c;Programs&#x5c;Python&#x5c;Python310&#x5c;python.exe&#x22; &#x22;C&#x3a;&#x5c;Hiep&#x5c;DataKiban&#x5c;2024-HiepHN&#x5c;Data_ETL&#x5c;Py_Script&#x5c;load_seller_brand.py&#x22;</script>
       <loglevel>Basic</loglevel>
       <parallel>N</parallel>
       <draw>Y</draw>
@@ -158,7 +158,7 @@
       <add_date>N</add_date>
       <add_time>N</add_time>
       <insertScript>Y</insertScript>
-      <script>&#x22;C&#x3a;&#x5c;Users&#x5c;HiepHN&#x5c;AppData&#x5c;Local&#x5c;Programs&#x5c;Python&#x5c;Python310&#x5c;python.exe&#x22; &#x22;C&#x3a;&#x5c;Hiep&#x5c;DataKiban&#x5c;2024-HiepHN&#x5c;Data_ETL&#x5c;Py_Script&#x5c;load_product.py&#x22;</script>
+      <script>&#x22;C&#x3a;&#x5c;Users&#x5c;hieph&#x5c;AppData&#x5c;Local&#x5c;Programs&#x5c;Python&#x5c;Python310&#x5c;python.exe&#x22; &#x22;C&#x3a;&#x5c;Hiep&#x5c;DataKiban&#x5c;2024-HiepHN&#x5c;Data_ETL&#x5c;Py_Script&#x5c;load_product.py&#x22;</script>
       <loglevel>Basic</loglevel>
       <parallel>N</parallel>
       <draw>Y</draw>
