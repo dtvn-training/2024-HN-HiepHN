@@ -18,7 +18,7 @@ class ScrapingClubSpider(scrapy.Spider):
     def start_requests(self):
         df=pd.read_csv("./output/tiki_url_filtered.csv")
         urls=df["url"].tolist()
-        for i in range(0,200):
+        for i in range(90,290):
                 time.sleep(2)
                 try:
                     yield scrapy.Request(url=urls[i], callback=self.parseProduct)
@@ -106,9 +106,8 @@ class ScrapingClubSpider(scrapy.Spider):
         product["category"]= []
         try:    
             categories=driver.find_elements(By.CSS_SELECTOR,".breadcrumb-item")
-        
-            for category in categories:
-                product["category"].append(category.text)
+            product["category"] = ";;".join([category.text for category in categories])
+                            
         except Exception as e:
                 print(e)
             
