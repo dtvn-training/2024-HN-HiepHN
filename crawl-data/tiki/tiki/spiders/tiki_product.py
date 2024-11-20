@@ -178,7 +178,6 @@ class ScrapingClubSpider(scrapy.Spider):
                     review_table.append("")
                     
                 try:
-                    driver.save_screenshot("tiki.png")
                     review_img=[]
                     imgs = review.find_elements(By.CSS_SELECTOR,".review-comment__image")
                     for img in imgs:
