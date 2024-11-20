@@ -1,11 +1,9 @@
-from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String
+from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.orm import sessionmaker
 import pandas as pd
 import os
-from pathlib import Path
-
 
 engine = create_engine("mysql://root:1234@localhost/test", echo = True)
 Base = declarative_base()

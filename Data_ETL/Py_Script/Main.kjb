@@ -51,8 +51,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>256</xloc>
-      <yloc>208</yloc>
+      <xloc>208</xloc>
+      <yloc>96</yloc>
       </entry>
     <entry>
       <name>Transformation</name>
@@ -84,8 +84,8 @@
       </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>432</xloc>
-      <yloc>208</yloc>
+      <xloc>384</xloc>
+      <yloc>96</yloc>
       </entry>
     <entry>
       <name>Shell</name>
@@ -102,13 +102,13 @@
       <add_date>N</add_date>
       <add_time>N</add_time>
       <insertScript>Y</insertScript>
-      <script>&#x22;C&#x3a;&#x5c;Users&#x5c;hieph&#x5c;AppData&#x5c;Local&#x5c;Programs&#x5c;Python&#x5c;Python310&#x5c;python.exe&#x22; &#x22;C&#x3a;&#x5c;Hiep&#x5c;DataKiban&#x5c;2024-HiepHN&#x5c;Data_ETL&#x5c;Py_Script&#x5c;load_seller_brand.py&#x22;</script>
+      <script>&#x22;C&#x3a;&#x5c;Users&#x5c;HiepHN&#x5c;AppData&#x5c;Local&#x5c;Programs&#x5c;Python&#x5c;Python310&#x5c;python.exe&#x22; &#x22;C&#x3a;&#x5c;Hiep&#x5c;DataKiban&#x5c;2024-HiepHN&#x5c;Data_ETL&#x5c;Py_Script&#x5c;load_seller_brand.py&#x22;</script>
       <loglevel>Basic</loglevel>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>800</xloc>
-      <yloc>208</yloc>
+      <xloc>752</xloc>
+      <yloc>96</yloc>
       </entry>
     <entry>
       <name>Transformation 3</name>
@@ -140,8 +140,8 @@
       </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>960</xloc>
-      <yloc>208</yloc>
+      <xloc>912</xloc>
+      <yloc>96</yloc>
       </entry>
     <entry>
       <name>Shell 2</name>
@@ -158,13 +158,13 @@
       <add_date>N</add_date>
       <add_time>N</add_time>
       <insertScript>Y</insertScript>
-      <script>&#x22;C&#x3a;&#x5c;Users&#x5c;hieph&#x5c;AppData&#x5c;Local&#x5c;Programs&#x5c;Python&#x5c;Python310&#x5c;python.exe&#x22; &#x22;C&#x3a;&#x5c;Hiep&#x5c;DataKiban&#x5c;2024-HiepHN&#x5c;Data_ETL&#x5c;Py_Script&#x5c;load_product.py&#x22;</script>
+      <script>&#x22;C&#x3a;&#x5c;Users&#x5c;HiepHN&#x5c;AppData&#x5c;Local&#x5c;Programs&#x5c;Python&#x5c;Python310&#x5c;python.exe&#x22; &#x22;C&#x3a;&#x5c;Hiep&#x5c;DataKiban&#x5c;2024-HiepHN&#x5c;Data_ETL&#x5c;Py_Script&#x5c;load_product.py&#x22;</script>
       <loglevel>Basic</loglevel>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>1136</xloc>
-      <yloc>208</yloc>
+      <xloc>1088</xloc>
+      <yloc>96</yloc>
       </entry>
     <entry>
       <name>Transformation 4</name>
@@ -196,8 +196,8 @@
       </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>1136</xloc>
-      <yloc>352</yloc>
+      <xloc>1280</xloc>
+      <yloc>96</yloc>
       </entry>
     <entry>
       <name>Transformation 2</name>
@@ -229,8 +229,54 @@
       </parameters>      <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>592</xloc>
-      <yloc>208</yloc>
+      <xloc>544</xloc>
+      <yloc>96</yloc>
+      </entry>
+    <entry>
+      <name>Shell 3</name>
+      <description/>
+      <type>SHELL</type>
+      <filename/>
+      <work_directory/>
+      <arg_from_previous>N</arg_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <set_logfile>N</set_logfile>
+      <logfile/>
+      <set_append_logfile>N</set_append_logfile>
+      <logext/>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <insertScript>Y</insertScript>
+      <script>&#x22;C&#x3a;&#x5c;Users&#x5c;HiepHN&#x5c;AppData&#x5c;Local&#x5c;Programs&#x5c;Python&#x5c;Python310&#x5c;python.exe&#x22; &#x22;C&#x3a;&#x5c;Hiep&#x5c;DataKiban&#x5c;2024-HiepHN&#x5c;Data_ETL&#x5c;Py_Script&#x5c;load_category.py&#x22;</script>
+      <loglevel>Basic</loglevel>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>1280</xloc>
+      <yloc>224</yloc>
+      </entry>
+    <entry>
+      <name>Shell 4</name>
+      <description/>
+      <type>SHELL</type>
+      <filename/>
+      <work_directory/>
+      <arg_from_previous>N</arg_from_previous>
+      <exec_per_row>N</exec_per_row>
+      <set_logfile>N</set_logfile>
+      <logfile/>
+      <set_append_logfile>N</set_append_logfile>
+      <logext/>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <insertScript>Y</insertScript>
+      <script>&#x22;C&#x3a;&#x5c;Users&#x5c;HiepHN&#x5c;AppData&#x5c;Local&#x5c;Programs&#x5c;Python&#x5c;Python310&#x5c;python.exe&#x22; &#x22;C&#x3a;&#x5c;Hiep&#x5c;DataKiban&#x5c;2024-HiepHN&#x5c;Data_ETL&#x5c;Py_Script&#x5c;load_review.py&#x22;</script>
+      <loglevel>Basic</loglevel>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>1280</xloc>
+      <yloc>352</yloc>
       </entry>
   </entries>
   <hops>
@@ -282,6 +328,24 @@
     <hop>
       <from>Shell 2</from>
       <to>Transformation 4</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Transformation 4</from>
+      <to>Shell 3</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>N</unconditional>
+    </hop>
+    <hop>
+      <from>Shell 3</from>
+      <to>Shell 4</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>

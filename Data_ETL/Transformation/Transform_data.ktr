@@ -252,7 +252,7 @@ public boolean processRow(StepMetaInterface smi, StepDataInterface sdi) throws K
 			}
 
 
-         	String newString = String.valueOf(rating)+"+"+contentString+"+"+transformImgString;
+         	String newString = String.valueOf(rating)+"++"+contentString+"++"+transformImgString;
 
 
             transformReview=transformReview + newString;

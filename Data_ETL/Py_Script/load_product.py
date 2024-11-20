@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, Float
+from sqlalchemy import create_engine, Column, Integer, String, Float
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.orm import sessionmaker
