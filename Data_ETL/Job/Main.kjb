@@ -55,7 +55,7 @@
       <yloc>96</yloc>
       </entry>
     <entry>
-      <name>Transform data</name>
+      <name>Transform</name>
       <description/>
       <type>TRANS</type>
       <specification_method>filename</specification_method>
@@ -88,7 +88,7 @@
       <yloc>96</yloc>
       </entry>
     <entry>
-      <name>Load data</name>
+      <name>Load</name>
       <description/>
       <type>SHELL</type>
       <filename/>
@@ -114,7 +114,7 @@
   <hops>
     <hop>
       <from>START</from>
-      <to>Transform data</to>
+      <to>Transform</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -122,8 +122,8 @@
       <unconditional>Y</unconditional>
     </hop>
     <hop>
-      <from>Transform data</from>
-      <to>Load data</to>
+      <from>Transform</from>
+      <to>Load</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>

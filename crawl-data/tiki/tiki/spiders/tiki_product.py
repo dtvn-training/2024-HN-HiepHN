@@ -14,9 +14,7 @@ import os
 
 class ScrapingClubSpider(scrapy.Spider):
     name = "tiki_product"
-    
-
-     
+        
     def start_requests(self):
         current_dir = os.path.dirname(__file__)
             
@@ -24,7 +22,7 @@ class ScrapingClubSpider(scrapy.Spider):
 
         df=pd.read_csv(target_dir)
         urls=df["url"].tolist()
-        for i in range(0,1):
+        for i in range(2):
                 time.sleep(2)
                 try:
                     yield scrapy.Request(url=urls[i], callback=self.parseProduct)
