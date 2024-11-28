@@ -1,156 +1,152 @@
+from time import sleep
 import scrapy
-from selenium import webdriver
 from selenium.webdriver import ActionChains
 from selenium.webdriver.support.wait import WebDriverWait
-from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support import expected_conditions as EC
+from scrapy_selenium import SeleniumRequest
 
-import time
 from selenium.webdriver.common.by import By
 
 import pandas as pd
 
 import os 
 
+import logging
+
 class ScrapingClubSpider(scrapy.Spider):
     name = "tiki_product"
+    
+    def __init__(self, name: str | None = None, **kwargs: EC.Any):
+        super().__init__(name, **kwargs)
+        
+        current_dir = os.path.dirname(__file__)
+        target_dir = os.path.normpath(os.path.join(current_dir,"../../output/tiki_url_filtered.csv"))
+        df = pd.read_csv(target_dir)
+        
+        self.urls = df["url"].tolist()
+        
+        self.current_index = 0 
+        
+        self.max_size = min(2,len(self.urls))
+        
+    def crawl_from_css(self, type, attribute, parameters, dict, key, driver, css):
+        
+        if type == "property":
+            try:
+                attr = getattr(driver.find_element(By.CSS_SELECTOR,css),attribute) 
+                dict[key] = attr
+            except Exception as e:
+                logging.error(e)
+        else:
+            try:
+                attr = getattr(driver.find_element(By.CSS_SELECTOR,css),attribute)
+                args = [x for x in parameters.split(',')]
+                dict[key] = attr(*args)
+            except Exception as e:
+                logging.error(e)
+                
+    def crawl_list_css(self, type, attribute, parameters, dict, key, driver, css):
+        if type == "property":
+            try:
+                dict[key] = []
+                element_list = driver.find_elements(By.CSS_SELECTOR,css)
+                for element in element_list:
+                    attr = getattr(element,attribute)
+                    dict[key].append(attr)
+            except Exception as e:
+                logging.error(e)
+        else:
+            try:
+                dict[key] = []
+                element_list = driver.find_elements(By.CSS_SELECTOR,css)
+                args = [x for x in parameters.split(',')]
+                for element in element_list:
+                    attr = getattr(element,attribute)
+                    dict[key].append(attr(*args))
+            except Exception as e:
+                logging.error(e)
+        
+    def wait_till_found(self, time, driver, css):
+        try:
+            WebDriverWait(driver,time).until(EC.presence_of_element_located((By.CSS_SELECTOR,css)))
+        except Exception as e:
+            logging.error(e)          
         
     def start_requests(self):
-        current_dir = os.path.dirname(__file__)
+        
+        if(self.current_index < self.max_size):
+            yield SeleniumRequest(url=self.urls[self.current_index], callback = self.parseProduct, dont_filter=True)
             
-        target_dir=os.path.normpath(os.path.join(current_dir,"../../output/tiki_url_filtered.csv"))
-
-        df=pd.read_csv(target_dir)
-        urls=df["url"].tolist()
-        for i in range(2):
-                time.sleep(2)
-                try:
-                    yield scrapy.Request(url=urls[i], callback=self.parseProduct)
-                except Exception as e:
-                    print(e)
         
     def parseProduct(self,response):
-        driver = webdriver.Chrome()
-        driver.get(response.url)
-        product={}
+        # driver = webdriver.Chrome()
+        # driver.get(response.url)
+        
+        driver = response.request.meta["driver"]
+        product = {}
 
 
         driver.set_window_position(0,0)
         driver.set_window_size(1920,1080)
         ActionChains(driver).scroll_by_amount(0,1000).perform()
 
-        try:
-            WebDriverWait(driver,10).until(EC.presence_of_element_located((By.CSS_SELECTOR,"div.SellerName__SellerNameStyled-sc-5d1cxl-0")))
-            product["seller_name"] = driver.find_element(By.CSS_SELECTOR,"div.SellerName__SellerNameStyled-sc-5d1cxl-0").text
-            product["seller_url"] = driver.find_element(By.CSS_SELECTOR,"div.SellerName__SellerNameStyled-sc-5d1cxl-0 a").get_attribute("href")
+        
+        product["product_url"] = driver.current_url
 
-        except Exception as e:
-            print(e)
+        self.wait_till_found(5,driver,"div.SellerHeader__SellerHeaderStyled-sc-la7c6v-0")
+
+        key_css_attr_params = [("product_name", ".Title__TitledStyled-sc-c64ni5-0", "text", ""),
+                        ("current_price", ".product-price__current-price", "text", ""),
+                        ("discount_rate", ".product-price__discount-rate", "text", ""),
+                        ("original_price", ".product-price__original-price", "text", ""),
+                        ("number_solds", ".styles__RatingStyled-sc-1onuk2l-0 .styles__StyledQuantitySold-sc-1onuk2l-3", "text", ""),
+                        ("number_reviews", ".styles__RatingStyled-sc-1onuk2l-0 .number", "text", ""),
+                        ("brand_name", "h6 a", "text", ""),
+                        ("brand_url", "h6 a", "get_attribute", "href"),
+                        ("seller_name", "div.SellerName__SellerNameStyled-sc-5d1cxl-0", "text", ""),
+                        ("seller_url", "div.SellerName__SellerNameStyled-sc-5d1cxl-0 a", "get_attribute", "href")]
+        
+        for key,css,attr,params in key_css_attr_params:
+            if attr == "text":
+                self.crawl_from_css("property", attr, params, product, key, driver, css)
+            else:
+                self.crawl_from_css("method", attr, params, product, key, driver, css)
+                
+        # WebDriverWait(driver,2)
             
         ActionChains(driver).scroll_by_amount(0,1000).perform()
-        try:
-            WebDriverWait(driver,10).until(EC.presence_of_element_located((By.CSS_SELECTOR,".HighlightInfo__HighlightInfoContentStyled-sc-1pr13u3-0")))
-        except Exception as e: 
-            print(e)
-    
-        ActionChains(driver).scroll_by_amount(0,1000).perform()
+        self.wait_till_found(5,driver,".HighlightInfo__HighlightInfoContentStyled-sc-1pr13u3-0")
 
-        try: 
-            WebDriverWait(driver,10).until(EC.presence_of_element_located((By.CSS_SELECTOR,".ToggleContent__Wrapper-sc-fbuwol-1")))
-        except Exception as e:
-            print(e)
+        ActionChains(driver).scroll_by_amount(0,1000).perform()
+        self.wait_till_found(5,driver,".ToggleContent__Wrapper-sc-fbuwol-1")
             
         ActionChains(driver).scroll_by_amount(0,1000).perform()
-            
-          
-        code_lines=[
-            "product[\"product_name\"] = driver.find_element(By.CSS_SELECTOR,\".Title__TitledStyled-sc-c64ni5-0\").text",
-            "product[\"product_url\"] = driver.current_url",
+        
 
-            "product[\"current_price\"] = driver.find_element(By.CSS_SELECTOR,\".product-price__current-price\").text",
-            "product[\"discount_rate\"] = driver.find_element(By.CSS_SELECTOR,\".product-price__discount-rate\").text",
-            "product[\"original_price\"] = driver.find_element(By.CSS_SELECTOR,\".product-price__original-price\").text",
-                
-            
-            "product[\"number_solds\"] = driver.find_element(By.CSS_SELECTOR,\".styles__RatingStyled-sc-1onuk2l-0 .styles__StyledQuantitySold-sc-1onuk2l-3\").text",
-            "product[\"number_reviews\"] = driver.find_element(By.CSS_SELECTOR,\".styles__RatingStyled-sc-1onuk2l-0 .number\").text",
-            
-            "product[\"brand_name\"] = driver.find_element(By.CSS_SELECTOR,\"h6 a\").text",
-            "product[\"brand_url\"] = driver.find_element(By.CSS_SELECTOR,\"h6 a\").get_attribute(\"href\")",
-                
-        ]
-            
-        for line in code_lines:
-            try:
-                exec(line)
-            except Exception as e:
-                print("error"+line)
-                print(e)
-                    
-        product["product_imgs"]=[]
-        try:
-            product_imgs=driver.find_elements(By.CSS_SELECTOR,".thumbnail-list div.content span.slider picture.webpimg-container img")
-                
-            for img in product_imgs:
-                product["product_imgs"].append(img.get_attribute("src"))
-            
-        except Exception as e:
-            print(e)
-                 
-           
-        product["feature"] = []
-        try: 
-            hightlights=driver.find_elements(By.CSS_SELECTOR,".HighlightInfo__HighlightInfoContentStyled-sc-1pr13u3-0")
-            
-            for hightlight in hightlights:
-                product["feature"].append(hightlight.text)
-        except Exception as e:
-                print(e)
-            
-        product["category"]= []
-        try:    
-            categories=driver.find_elements(By.CSS_SELECTOR,".breadcrumb-item")
-            product["category"] = ";;".join([category.text for category in categories])
-                            
-        except Exception as e:
-                print(e)
+        self.crawl_list_css("method", "get_attribute", "src", product, "product_imgs", driver, ".thumbnail-list div.content span.slider picture.webpimg-container img")            
+        
+        self.crawl_list_css("property", "text", "", product, "feature", driver, ".HighlightInfo__HighlightInfoContentStyled-sc-1pr13u3-0")            
+        
+        self.crawl_list_css("property", "text", "", product, "category", driver, ".breadcrumb-item")           
+        product["category"] = ";;".join([txt for txt in product["category"]])
             
         try:
             button_more = driver.find_element(By.CSS_SELECTOR,".btn-more")
             button_more.click()
         except Exception as e:
-            print(e)
-            
-        try:
-            descripts = driver.find_element(By.CSS_SELECTOR,".ToggleContent__View-sc-fbuwol-0")
-            product["description"]=descripts.text
-            print(descripts.text)
-        except Exception as e:
-            print(e)
-            
-        product["detail"]=[]
-        try:
-            details=driver.find_elements(By.CSS_SELECTOR,"div[style=\"display: grid; grid-template-columns: 55% 45%; gap: 4px;\"].WidgetTitle__WidgetContentRowStyled-sc-12sadap-3")
-            for detail in details:
-                product["detail"].append(detail.text)
-        except Exception as e:
-            print(e)
+            logging.error(e)
+        self.crawl_from_css("property", "text", "", product, "description", driver, ".ToggleContent__View-sc-fbuwol-0")
+    
+        self.crawl_list_css("property", "text", "", product, "detail", driver, "div[style=\"display: grid; grid-template-columns: 55% 45%; gap: 4px;\"].WidgetTitle__WidgetContentRowStyled-sc-12sadap-3")            
                 
         ActionChains(driver).scroll_by_amount(0,1000).perform()
-        try:
-            WebDriverWait(driver,10).until(EC.presence_of_element_located((By.CSS_SELECTOR,".customer-reviews__pagination li a.next")))
-        except Exception as e:
-            print(e)
+        self.wait_till_found(5,driver,".customer-reviews__pagination li a.next")
 
         WebDriverWait(driver,1)
-
-        try:
-            avg_rating = driver.find_element(By.CSS_SELECTOR,".review-rating__point")
-            product["avg_rating"] = avg_rating.text
-        except Exception as e:
-            print(e)
-
-        review_list_table=[]
+        
+        self.crawl_from_css("property", "text", "", product, "avg_rating", driver, ".review-rating__point")
+     
+        review_list_table = []
         # while True:
                 
         #     try:
@@ -162,40 +158,38 @@ class ScrapingClubSpider(scrapy.Spider):
             review_list = driver.find_elements(By.CSS_SELECTOR,".review-comment")
                 
             for review in review_list:
-                review_table=[]
+                review_table = []
                 try:
                     show_more_button = review.find_element(By.CSS_SELECTOR,".show-more-content")
                     show_more_button.click()
                 except Exception as e:
-                    print(e)
+                    logging.error(e)
                     
                 try:
                     review_table.append(review.find_element(By.CSS_SELECTOR,".review-comment__rating").get_attribute("innerHTML"))
                 except Exception as e :
-                    print(e)
+                    logging.error(e)
                     review_table.append("")
                     
                 try:
                     review_table.append(review.find_element(By.CSS_SELECTOR,".review-comment__content").text)
                 except Exception as e :
-                    print(e)
+                    logging.error(e)
                     review_table.append("")
                     
                 try:
-                    review_img=[]
+                    review_img = []
                     imgs = review.find_elements(By.CSS_SELECTOR,".review-comment__image")
                     for img in imgs:
                         review_img.append(img.get_attribute("style"))
                     review_table.append(review_img)
                 except Exception as e:
-                    print(e)
-                    print("abc")
-                    review_table.append("ff")
+                    review_table.append([])
                     
                 review_list_table.append(review_table)
                         
         except Exception as e:
-            print(e) 
+            logging.error(e)
         
         
         
@@ -208,32 +202,40 @@ class ScrapingClubSpider(scrapy.Spider):
             #     print("button err")
             #     print(e)
             #     break 
-        driver.close()    
-        yield{
-                "product_name":product.get("product_name",""),
-                "product_url":product.get("product_url",""),
-                
-                "avg_rating":product.get("avg_rating"),
-                "number_sold":product.get("number_solds"),
-                "number_reviews":product.get("number_reviews"),
-                
-                "product_imgs":product.get("product_imgs"),
-                
-                "current_price":product.get("current_price",""),
-                "discount_rate":product.get("discount_rate",""),
-                "original_price":product.get("original_price",""),
-                
-                "brand_name":product.get("brand_name",""),
-                "brand_url":product.get("brand_url",""),
-                
-                "seller_name":product.get("seller_name",""),
-                "seller_url":product.get("seller_url",""),
-                
-                "review":review_list_table,
-                
-                "feature":product.get("feature",""),
-                "category":product.get("category",""),
-                "detail":product.get("detail",""),
-                "description":product.get("description","")
-               
-        }
+            
+        if self.current_index!= 0:
+                yield {
+                    "product_name":product.get("product_name",""),
+                    "product_url":product.get("product_url",""),
+                    
+                    "avg_rating":product.get("avg_rating"),
+                    "number_sold":product.get("number_solds"),
+                    "number_reviews":product.get("number_reviews"),
+                    
+                    "product_imgs":product.get("product_imgs"),
+                    
+                    "current_price":product.get("current_price",""),
+                    "discount_rate":product.get("discount_rate",""),
+                    "original_price":product.get("original_price",""),
+                    
+                    "brand_name":product.get("brand_name",""),
+                    "brand_url":product.get("brand_url",""),
+                    
+                    "seller_name":product.get("seller_name",""),
+                    "seller_url":product.get("seller_url",""),
+                    
+                    "review":review_list_table,
+                    
+                    "feature":product.get("feature",""),
+                    "category":product.get("category",""),
+                    "detail":product.get("detail",""),
+                    "description":product.get("description","")
+                    
+                }
+        
+        self.current_index += 1
+        if(self.current_index < self.max_size):
+            yield SeleniumRequest(url=self.urls[self.current_index], callback = self.parseProduct, dont_filter=True)
+        elif self.current_index == self.max_size:
+            yield SeleniumRequest(url=self.urls[0], callback = self.parseProduct, dont_filter=True)
+
