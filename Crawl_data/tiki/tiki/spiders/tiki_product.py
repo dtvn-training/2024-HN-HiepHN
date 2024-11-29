@@ -1,18 +1,21 @@
-from time import sleep
 import scrapy
+import pandas as pd
+import os 
+import logging
+
+from dotenv import load_dotenv
+
 from selenium.webdriver import ActionChains
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 from scrapy_selenium import SeleniumRequest
 
-from selenium.webdriver.common.by import By
+load_dotenv()
 
-import pandas as pd
-
-import os 
-
-import logging
-
+MAX_URL_CRAWL = int(os.getenv("MAX_URL_CRAWL"))
+WAIT_TIME = int(os.getenv("WAIT_TIME"))
+   
 class ScrapingClubSpider(scrapy.Spider):
     name = "tiki_product"
     
@@ -27,7 +30,10 @@ class ScrapingClubSpider(scrapy.Spider):
         
         self.current_index = 0 
         
-        self.max_size = min(2,len(self.urls))
+        self.max_size = min(MAX_URL_CRAWL,len(self.urls))
+        
+        if MAX_URL_CRAWL == -1:
+            self.max_size = len(self.urls)
         
     def crawl_from_css(self, type, attribute, parameters, dict, key, driver, css):
         
@@ -75,7 +81,7 @@ class ScrapingClubSpider(scrapy.Spider):
     def start_requests(self):
         
         if(self.current_index < self.max_size):
-            yield SeleniumRequest(url=self.urls[self.current_index], callback = self.parseProduct, dont_filter=True)
+            yield SeleniumRequest(url = self.urls[self.current_index], callback = self.parseProduct, errback = self.errback, dont_filter = True)
             
         
     def parseProduct(self,response):
@@ -93,7 +99,7 @@ class ScrapingClubSpider(scrapy.Spider):
         
         product["product_url"] = driver.current_url
 
-        self.wait_till_found(5,driver,"div.SellerHeader__SellerHeaderStyled-sc-la7c6v-0")
+        self.wait_till_found(WAIT_TIME,driver,"div.SellerHeader__SellerHeaderStyled-sc-la7c6v-0")
 
         key_css_attr_params = [("product_name", ".Title__TitledStyled-sc-c64ni5-0", "text", ""),
                         ("current_price", ".product-price__current-price", "text", ""),
@@ -115,10 +121,10 @@ class ScrapingClubSpider(scrapy.Spider):
         # WebDriverWait(driver,2)
             
         ActionChains(driver).scroll_by_amount(0,1000).perform()
-        self.wait_till_found(5,driver,".HighlightInfo__HighlightInfoContentStyled-sc-1pr13u3-0")
+        self.wait_till_found(WAIT_TIME,driver,".HighlightInfo__HighlightInfoContentStyled-sc-1pr13u3-0")
 
         ActionChains(driver).scroll_by_amount(0,1000).perform()
-        self.wait_till_found(5,driver,".ToggleContent__Wrapper-sc-fbuwol-1")
+        self.wait_till_found(WAIT_TIME,driver,".ToggleContent__Wrapper-sc-fbuwol-1")
             
         ActionChains(driver).scroll_by_amount(0,1000).perform()
         
@@ -140,7 +146,7 @@ class ScrapingClubSpider(scrapy.Spider):
         self.crawl_list_css("property", "text", "", product, "detail", driver, "div[style=\"display: grid; grid-template-columns: 55% 45%; gap: 4px;\"].WidgetTitle__WidgetContentRowStyled-sc-12sadap-3")            
                 
         ActionChains(driver).scroll_by_amount(0,1000).perform()
-        self.wait_till_found(5,driver,".customer-reviews__pagination li a.next")
+        self.wait_till_found(WAIT_TIME,driver,".customer-reviews__pagination li a.next")
 
         WebDriverWait(driver,1)
         
@@ -235,7 +241,14 @@ class ScrapingClubSpider(scrapy.Spider):
         
         self.current_index += 1
         if(self.current_index < self.max_size):
-            yield SeleniumRequest(url=self.urls[self.current_index], callback = self.parseProduct, dont_filter=True)
+            yield SeleniumRequest(url = self.urls[self.current_index], callback = self.parseProduct, errback = self.errback, dont_filter = True)
         elif self.current_index == self.max_size:
-            yield SeleniumRequest(url=self.urls[0], callback = self.parseProduct, dont_filter=True)
+            yield SeleniumRequest(url = self.urls[0], callback = self.parseProduct, errback = self.errback, dont_filter = True)
+    
+    def errback(self, failure):
+        self.current_index +=1
+        if(self.current_index < self.max_size):
+            yield SeleniumRequest(url = self.urls[self.current_index], callback = self.parseProduct, errback = self.errback, dont_filter = True)
+        elif self.current_index == self.max_size:
+            yield SeleniumRequest(url = self.urls[0], callback = self.parseProduct, errback = self.errback, dont_filter = True)
 

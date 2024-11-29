@@ -1,8 +1,15 @@
+import os
+from dotenv import load_dotenv
+
 from sqlalchemy import create_engine, Column, Integer, String, Float, ForeignKey, Table
 from sqlalchemy.orm import declarative_base, relationship
 from sqlalchemy.orm import sessionmaker
 
-engine = create_engine("mysql://root:1234@localhost/test", echo = True)
+load_dotenv()
+
+MY_SQL_CONNECTION = os.getenv("MY_SQL_CONNECTION")
+
+engine = create_engine(MY_SQL_CONNECTION, echo = True)
 Base = declarative_base()
 Session = sessionmaker(bind = engine)
 
