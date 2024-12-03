@@ -8,14 +8,13 @@
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
 SELENIUM_DRIVER_NAME = 'chrome'
-SELENIUM_DRIVER_ARGUMENTS=["--headless=new"]  
+SELENIUM_DRIVER_ARGUMENTS = ["--headless=new"]  
   
 DOWNLOADER_MIDDLEWARES = {
      'scrapy_selenium.SeleniumMiddleware': 800
      }
 
 USER_AGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/34.0.1847.131 Safari/537.36"
-
 
 BOT_NAME = "tiki"
 

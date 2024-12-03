@@ -3,7 +3,8 @@ Crawl_data/*/chromedriver.exe
 
 #Data
 Crawl_data/tiki/output*
-Data_ETL/Data*
+Data_ETL/Data/tiki_product.csv
+Data_ETL/Data/transformed_data.csv
 
 #Cache 
 Crawl_data/tiki/tiki/spiders/__pycache__*

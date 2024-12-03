@@ -26,10 +26,12 @@ class ScrapingClubSpider(scrapy.Spider):
             self.current_index = 0
             self.url_categories = []
         
+        # Start from the main page
         def start_requests(self):
             url = START_URL
-            yield SeleniumRequest(url = url, callback = self.parse)
-            
+            yield SeleniumRequest(url=url, callback=self.parse)
+        
+        # Extract all category url    
         def parse(self, response):
             driver = response.request.meta["driver"]
 
@@ -41,14 +43,14 @@ class ScrapingClubSpider(scrapy.Spider):
                     By.CSS_SELECTOR, "a").get_attribute("href"))
                 
             if self.current_index < len(self.url_categories):
-                yield SeleniumRequest(url = self.url_categories[self.current_index] + "?sort=" + SORT_TYPE, callback = self.parseCategory, errback = self.errback)
+                yield SeleniumRequest(url=self.url_categories[self.current_index] + "?sort=" + SORT_TYPE, callback=self.parseCategory, errback=self.errback)
 
         def parseCategory(self, response):
             driver = response.request.meta["driver"]
             prev_list_size = 0
             url_products = []
             
-
+            # While the url crawled still less than MAX_URL_PER_CATEGORY, continue to click button and fetch data
             while True:
                 if MAX_URL_PER_CATEGORY != -1 and len(url_products) >= MAX_URL_PER_CATEGORY:
                     break
@@ -59,6 +61,7 @@ class ScrapingClubSpider(scrapy.Spider):
                     if MAX_URL_PER_CATEGORY !=-1 and len(url_products) >= MAX_URL_PER_CATEGORY: 
                         break
                     
+                    # Option to crawl ads product or not 
                     if FILTER_ADS == "TRUE":
                         if not product_list[i].find_element(By.CSS_SELECTOR, "a").get_attribute("href").startswith(ADS_LINK):
                             url_products.append(product_list[i].find_element(By.CSS_SELECTOR, "a").get_attribute("href"))
@@ -72,6 +75,7 @@ class ScrapingClubSpider(scrapy.Spider):
                 except NoSuchElementException as e:
                     break
                     
+                # Sleep before fetching more data 
                 time.sleep(SLEEP_TIME)
                 show_button.click()
             
@@ -83,11 +87,11 @@ class ScrapingClubSpider(scrapy.Spider):
             self.current_index += 1
                 
             if self.current_index < len(self.url_categories):
-                yield SeleniumRequest(url = self.url_categories[self.current_index] + "?sort=" + SORT_TYPE, callback=self.parseCategory, errback = self.errback)
+                yield SeleniumRequest(url=self.url_categories[self.current_index] + "?sort=" + SORT_TYPE, callback=self.parseCategory, errback=self.errback)
                 
         def errback(self,failure):
             self.current_index += 1
                 
             if self.current_index < len(self.url_categories):
-                yield SeleniumRequest(url = self.url_categories[self.current_index] + "?sort=" + SORT_TYPE, callback=self.parseCategory, errback = self.errback)
-                
+                yield SeleniumRequest(url=self.url_categories[self.current_index] + "?sort=" + SORT_TYPE, callback=self.parseCategory, errback=self.errback)
+                           

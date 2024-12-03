@@ -154,11 +154,11 @@ public boolean processRow(StepMetaInterface smi, StepDataInterface sdi) throws K
  
     Object[] outputRow = createOutputRow(r, data.outputRowMeta.size());
  
-    String firstname = get(Fields.In, "current_price").getString(r);
-    String lastname =  get(Fields.In, "original_price").getString(r);
+    String currentPrice = get(Fields.In, "current_price").getString(r);
+    String originalPrice =  get(Fields.In, "original_price").getString(r);
    
-    if (lastname.equals("-1")){
-    get(Fields.Out, "original_price").setValue(outputRow, firstname);
+    if (originalPrice.equals("-1")){
+    get(Fields.Out, "original_price").setValue(outputRow, currentPrice);
  }
     putRow(data.outputRowMeta, outputRow);
     return true;
@@ -535,7 +535,7 @@ public boolean processRow(StepMetaInterface smi, StepDataInterface sdi) throws K
    <leftvalue>product_name</leftvalue>
    <function>&#x3d;</function>
    <rightvalue/>
-   <value><name>constant</name><type>String</type><text>NA</text><length>-1</length><precision>-1</precision><isnull>N</isnull><mask/></value>   </condition>
+   <value><name>constant</name><type>String</type><text>N&#x2f;A</text><length>-1</length><precision>-1</precision><isnull>N</isnull><mask/></value>   </condition>
   </conditions>
  </condition>
     </compare>
@@ -989,13 +989,13 @@ public boolean processRow(StepMetaInterface smi, StepDataInterface sdi) throws K
     <fields>
       <field>
         <name>product_name</name>
-        <value>NA</value>
+        <value>N&#x2f;A</value>
         <mask/>
         <set_empty_string>N</set_empty_string>
         </field>
       <field>
         <name>product_url</name>
-        <value>NA</value>
+        <value>N&#x2f;A</value>
         <mask/>
         <set_empty_string>N</set_empty_string>
         </field>
@@ -1019,7 +1019,7 @@ public boolean processRow(StepMetaInterface smi, StepDataInterface sdi) throws K
         </field>
       <field>
         <name>product_imgs</name>
-        <value>NA</value>
+        <value>N&#x2f;A</value>
         <mask/>
         <set_empty_string>N</set_empty_string>
         </field>
@@ -1043,43 +1043,43 @@ public boolean processRow(StepMetaInterface smi, StepDataInterface sdi) throws K
         </field>
       <field>
         <name>brand_name</name>
-        <value>NA</value>
+        <value>N&#x2f;A</value>
         <mask/>
         <set_empty_string>N</set_empty_string>
         </field>
       <field>
         <name>brand_url</name>
-        <value>NA</value>
+        <value>N&#x2f;A</value>
         <mask/>
         <set_empty_string>N</set_empty_string>
         </field>
       <field>
         <name>seller_name</name>
-        <value>NA</value>
+        <value>N&#x2f;A</value>
         <mask/>
         <set_empty_string>N</set_empty_string>
         </field>
       <field>
         <name>seller_url</name>
-        <value>NA</value>
+        <value>N&#x2f;A</value>
         <mask/>
         <set_empty_string>N</set_empty_string>
         </field>
       <field>
         <name>review</name>
-        <value>NA</value>
+        <value>N&#x2f;A</value>
         <mask/>
         <set_empty_string>N</set_empty_string>
         </field>
       <field>
         <name>category</name>
-        <value>NA</value>
+        <value>N&#x2f;A</value>
         <mask/>
         <set_empty_string>N</set_empty_string>
         </field>
       <field>
         <name>descript</name>
-        <value>NA</value>
+        <value>N&#x2f;A</value>
         <mask/>
         <set_empty_string>N</set_empty_string>
         </field>
