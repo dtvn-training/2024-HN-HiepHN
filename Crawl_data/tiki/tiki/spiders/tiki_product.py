@@ -2,7 +2,6 @@ import scrapy
 import pandas as pd
 import os 
 import logging
-import time
 
 from dotenv import load_dotenv
 

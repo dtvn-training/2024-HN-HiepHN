@@ -12,4 +12,4 @@ Crawl_data/tiki/tiki/__pycache__*
 Data_ETL/Py_Script/__pycache__*
 
 #env
-.env*
+.env

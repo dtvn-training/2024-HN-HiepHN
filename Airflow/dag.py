@@ -3,9 +3,9 @@ from airflow import DAG, Dataset
 from airflow.operators.bash import BashOperator
 from airflow.sensors.filesystem import FileSensor
 
-mysql_dataset = Dataset('mysql://root:1234@localhost/test')
+mysql_dataset = Dataset('mysql://localhost:3306/test')
 
-start_date = datetime(2024, 11, 25)
+start_date = datetime(2024, 12, 3)
 
 dag = DAG(
     'project',
@@ -23,20 +23,19 @@ dag = DAG(
 crawl_url = BashOperator(
     task_id='crawl_url',
     bash_command='cmd.exe /c "cd C:/Hiep/DataKiban/2024-HiepHN/Crawl_data/tiki && scrapy crawl tiki_url -O ./output/tiki_url.csv"',
-    dag=dag
+    dag=dag,
 )
 
 filter_url = BashOperator(
     task_id='filter_url',
     bash_command='cmd.exe /c "cd C:/Hiep/DataKiban/2024-HiepHN/Crawl_data/tiki && py filter.py"',
-    dag=dag
+    dag=dag,
 )
 
-#-O ../../Data_ETL/Data/tiki_product.csv
 crawl_product = BashOperator(
     task_id='crawl_product',
     bash_command='cmd.exe /c "cd C:/Hiep/DataKiban/2024-HiepHN/Crawl_data/tiki && scrapy crawl tiki_product -O ../../Data_ETL/Data/tiki_product.csv"',
-    dag=dag
+    dag=dag,
 )
 
 etl = BashOperator(
@@ -48,10 +47,10 @@ etl = BashOperator(
 
 wait_for_url = FileSensor(
     task_id='wait_for_url',
-    filepath='/mnt/c/hiep/datakiban/2024-hiephn/crawl-data/tiki/output/tiki_url.csv', 
+    filepath='/mnt/c/hiep/datakiban/2024-hiephn/crawl_data/tiki/output/tiki_url.csv', 
     fs_conn_id='fs_default', 
     poke_interval=5,
-    timeout=300
+    timeout=300,
 )
 
 wait_for_product = FileSensor( 
@@ -59,14 +58,14 @@ wait_for_product = FileSensor(
     filepath='/mnt/c/hiep/datakiban/2024-hiephn/data_etl/data/tiki_product.csv', 
     fs_conn_id='fs_default', 
     poke_interval=5,
-    timeout=300
+    timeout=300,
 )
 
 
 crawl_url >> wait_for_url >> filter_url >> crawl_product >> wait_for_product >> etl
 
-with DAG(dag_id='triggered_dag', start_date=start_date, schedule=[mysql_dataset]):
+with DAG(dag_id='consumer_dag', start_date=start_date, schedule=[mysql_dataset]):
     BashOperator(
         task_id='consuming_1',
-        bash_command="echo hello"
+        bash_command="echo hello",
     )

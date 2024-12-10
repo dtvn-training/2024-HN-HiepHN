@@ -79,13 +79,11 @@
   <hop> <from>Add source of data</from><to>Remove special character</to><enabled>Y</enabled> </hop>
   <hop> <from>Clean price field</from><to>Clean review field</to><enabled>Y</enabled> </hop>
   <hop> <from>Clean review field</from><to>Filter row with name and seller</to><enabled>Y</enabled> </hop>
-  <hop> <from>Filter row with name and seller</from><to>Sort product</to><enabled>Y</enabled> </hop>
   <hop> <from>Remove special character</from><to>Clean price field</to><enabled>Y</enabled> </hop>
   <hop> <from>Select necessary field</from><to>Validate missing data</to><enabled>Y</enabled> </hop>
-  <hop> <from>Sort product</from><to>Unique product</to><enabled>Y</enabled> </hop>
   <hop> <from>Validate missing data</from><to>Add source of data</to><enabled>Y</enabled> </hop>
-  <hop> <from>Unique product</from><to>Text file output</to><enabled>Y</enabled> </hop>
   <hop> <from>Extract data from Tiki</from><to>Select necessary field</to><enabled>Y</enabled> </hop>
+  <hop> <from>Filter row with name and seller</from><to>Text file output</to><enabled>Y</enabled> </hop>
   </order>
   <step>
     <name>Add source of data</name>
@@ -114,7 +112,7 @@
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>416</xloc>
+      <xloc>448</xloc>
       <yloc>256</yloc>
       <draw>Y</draw>
       </GUI>
@@ -169,7 +167,7 @@ public boolean processRow(StepMetaInterface smi, StepDataInterface sdi) throws K
     </fields><clear_result_fields>N</clear_result_fields>
 <info_steps></info_steps><target_steps></target_steps><usage_parameters></usage_parameters>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>720</xloc>
+      <xloc>752</xloc>
       <yloc>256</yloc>
       <draw>Y</draw>
       </GUI>
@@ -274,7 +272,7 @@ public boolean processRow(StepMetaInterface smi, StepDataInterface sdi) throws K
     </fields><clear_result_fields>N</clear_result_fields>
 <info_steps></info_steps><target_steps></target_steps><usage_parameters></usage_parameters>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>864</xloc>
+      <xloc>896</xloc>
       <yloc>256</yloc>
       <draw>Y</draw>
       </GUI>
@@ -506,7 +504,7 @@ public boolean processRow(StepMetaInterface smi, StepDataInterface sdi) throws K
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>32</xloc>
+      <xloc>48</xloc>
       <yloc>256</yloc>
       <draw>Y</draw>
       </GUI>
@@ -541,7 +539,7 @@ public boolean processRow(StepMetaInterface smi, StepDataInterface sdi) throws K
     </compare>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>1024</xloc>
+      <xloc>1056</xloc>
       <yloc>256</yloc>
       <draw>Y</draw>
       </GUI>
@@ -683,7 +681,7 @@ public boolean processRow(StepMetaInterface smi, StepDataInterface sdi) throws K
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>560</xloc>
+      <xloc>592</xloc>
       <yloc>256</yloc>
       <draw>Y</draw>
       </GUI>
@@ -767,125 +765,7 @@ public boolean processRow(StepMetaInterface smi, StepDataInterface sdi) throws K
       </field>        <select_unspecified>N</select_unspecified>
     </fields>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>160</xloc>
-      <yloc>256</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Sort product</name>
-    <type>SortRows</type>
-    <description/>
-    <distribute>N</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-      <directory>&#x25;&#x25;java.io.tmpdir&#x25;&#x25;</directory>
-      <prefix>out</prefix>
-      <sort_size>1000000</sort_size>
-      <free_memory/>
-      <compress>N</compress>
-      <compress_variable/>
-      <unique_rows>N</unique_rows>
-    <fields>
-      <field>
-        <name>product_name</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <presorted>N</presorted>
-      </field>
-      <field>
-        <name>product_url</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <presorted>N</presorted>
-      </field>
-      <field>
-        <name>avg_rating</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <presorted>N</presorted>
-      </field>
-      <field>
-        <name>number_sold</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <presorted>N</presorted>
-      </field>
-      <field>
-        <name>number_reviews</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <presorted>N</presorted>
-      </field>
-      <field>
-        <name>product_imgs</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <presorted>N</presorted>
-      </field>
-      <field>
-        <name>current_price</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <presorted>N</presorted>
-      </field>
-      <field>
-        <name>discount_rate</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <presorted>N</presorted>
-      </field>
-      <field>
-        <name>original_price</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <presorted>N</presorted>
-      </field>
-      <field>
-        <name>brand_name</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <presorted>N</presorted>
-      </field>
-      <field>
-        <name>brand_url</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <presorted>N</presorted>
-      </field>
-      <field>
-        <name>seller_name</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <presorted>N</presorted>
-      </field>
-      <field>
-        <name>seller_url</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <presorted>N</presorted>
-      </field>
-      <field>
-        <name>review</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <presorted>N</presorted>
-      </field>
-      <field>
-        <name>category</name>
-        <ascending>Y</ascending>
-        <case_sensitive>N</case_sensitive>
-        <presorted>N</presorted>
-      </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>1200</xloc>
+      <xloc>192</xloc>
       <yloc>256</yloc>
       <draw>Y</draw>
       </GUI>
@@ -937,32 +817,7 @@ public boolean processRow(StepMetaInterface smi, StepDataInterface sdi) throws K
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>1504</xloc>
-      <yloc>256</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Unique product</name>
-    <type>Unique</type>
-    <description/>
-    <distribute>N</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-      <count_rows>N</count_rows>
-      <count_field/>
-      <reject_duplicate_row>N</reject_duplicate_row>
-      <error_description/>
-    <fields>      <field>        <name>product_url</name>
-        <case_insensitive>N</case_insensitive>
-        </field>      </fields>     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>1376</xloc>
+      <xloc>1248</xloc>
       <yloc>256</yloc>
       <draw>Y</draw>
       </GUI>
@@ -1086,7 +941,7 @@ public boolean processRow(StepMetaInterface smi, StepDataInterface sdi) throws K
       </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>288</xloc>
+      <xloc>320</xloc>
       <yloc>256</yloc>
       <draw>Y</draw>
       </GUI>
