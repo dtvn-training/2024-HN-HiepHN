@@ -1,0 +1,15 @@
+#Chrome drive
+Crawl_data/*/chromedriver.exe
+
+#Data
+Crawl_data/tiki/output*
+Data_ETL/Data/tiki_product.csv
+Data_ETL/Data/transformed_data.csv
+
+#Cache 
+Crawl_data/tiki/tiki/spiders/__pycache__*
+Crawl_data/tiki/tiki/__pycache__*
+Data_ETL/Py_Script/__pycache__*
+
+#env
+.env
